@@ -39,7 +39,11 @@ const GlobalStyles = createGlobalStyle`
     background: ${(props) => props.theme.colors.primary};
   }
   a, button, input, textarea {
-    &:focus {
+    &:focus:not(:focus-visible) {
+      outline: 0;
+    }
+    &:focus-visible,
+    &:-moz-focusring {
       outline: 1px solid ${(props) => props.theme.colors.accent}
     }
   }
@@ -56,7 +60,9 @@ const themes = {
       button:
         "-5.0934px -5.0934px 15.2802px rgba(255, 255, 255, 0.5), 5.0934px 5.0934px 15.2802px rgba(136, 160, 183, 0.25);",
       input:
-        "inset -5.9893px -5.9893px 17.9679px rgba(255, 255, 255, 0.5), inset 5.9893px 5.9893px 17.9679px rgba(136, 160, 183, 0.25);"
+        "inset -5.9893px -5.9893px 17.9679px rgba(255, 255, 255, 0.5), inset 5.9893px 5.9893px 17.9679px rgba(136, 160, 183, 0.25);",
+      buttonInset:
+        "inset -5.0934px -5.0934px 15.2802px rgba(255, 255, 255, 0.5),inset 5.0934px 5.0934px 15.2802px rgba(136, 160, 183, 0.25);"
     }
   },
   dark: {
@@ -69,6 +75,8 @@ const themes = {
       button:
         "-6.22302px -6.22302px 18.6691px #3B4451, 6.22302px 6.22302px 18.6691px #000000;",
       input:
+        "inset -6.22302px -6.22302px 18.6691px #3B4451, inset 6.22302px 6.22302px 18.6691px #000000;",
+      buttonInset:
         "inset -6.22302px -6.22302px 18.6691px #3B4451, inset 6.22302px 6.22302px 18.6691px #000000;"
     }
   }

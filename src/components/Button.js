@@ -9,6 +9,9 @@ const StyledButton = styled.button`
   box-shadow: ${(props) => props.theme.shadows.button || `0 0 0 3px #000`};
   background: ${(props) => props.theme.colors.primary || `#000`};
   color: inherit;
+  &:active {
+    box-shadow: ${(props) => props.theme.shadows.buttonInset};
+  }
 `;
 
 export const Button = (props) => {
