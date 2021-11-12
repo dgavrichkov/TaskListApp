@@ -1,9 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { TaskItem } from "./TaskItem";
-import "./styles.css";
+import styled from "styled-components";
 
-export const TaskList = ({ tasks, onDoneTask, onDeleteTask }) => {
+const StyledList = styled.ul`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+export const TaskList = ({ pageClass, tasks, onDoneTask, onDeleteTask }) => {
   let listItems = null;
   if (tasks.length > 0) {
     listItems = tasks.map((task) => (
@@ -22,11 +31,7 @@ export const TaskList = ({ tasks, onDoneTask, onDeleteTask }) => {
     listItems = "Задач нет";
   }
 
-  useEffect(() => {
-    // console.log("tasklist rendered");
-  });
-
-  return <ul className="tasks-list">{listItems}</ul>;
+  return <StyledList className={pageClass}>{listItems}</StyledList>;
 };
 
 TaskList.propTypes = {
