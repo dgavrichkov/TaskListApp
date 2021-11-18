@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 
 const StyledWrap = styled.div`
@@ -15,7 +15,17 @@ const StyledWrap = styled.div`
   }
 `;
 
-export const TaskStat = ({ pageClass, countAllTasks, countDoneTasks }) => {
+interface StatProps {
+  pageClass: string;
+  countAllTasks: number;
+  countDoneTasks: number;
+}
+
+export const TaskStat: FC<StatProps> = ({
+  pageClass,
+  countAllTasks,
+  countDoneTasks
+}) => {
   return (
     <StyledWrap className={`${pageClass}`}>
       <p>Всего - {countAllTasks}</p>

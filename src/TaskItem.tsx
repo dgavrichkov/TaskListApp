@@ -1,9 +1,22 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import { Button } from "./components/Button";
 import styled from "styled-components";
 
-const StylesWrap = styled.div`
+interface TaskProps {
+  name: string;
+  tag: string;
+  id: string;
+  done: boolean;
+  onDoneTask: (id: string) => void;
+  onDeleteTask: (id: string) => void;
+}
+
+interface StyledWrapProps {
+  className: string;
+  done: boolean;
+}
+
+const StyledTaskItem = styled.div<StyledWrapProps>`
   border-radius: 4px;
   box-shadow: ${(props) => props.theme.shadows.button};
   padding: 14px;
@@ -37,6 +50,7 @@ const StylesWrap = styled.div`
   ${(props) =>
     props.done &&
     `
+      box-shadow: ${props.theme.shadows.buttonInset}
       opacity: 0.5;
       .name {
         text-decoration: line-through;
@@ -45,9 +59,16 @@ const StylesWrap = styled.div`
   `}
 `;
 
-export const TaskItem = ({ name, tag, id, done, onDoneTask, onDeleteTask }) => {
+export const TaskItem: FC<TaskProps> = ({
+  name,
+  tag,
+  id,
+  done,
+  onDoneTask,
+  onDeleteTask
+}) => {
   return (
-    <StylesWrap className={`task-item`} done={done}>
+    <StyledTaskItem className={`task-item`} done={done}>
       <b className="name">{name}</b>
       <i className="tag">{tag}</i>
       <Button
@@ -68,15 +89,6 @@ export const TaskItem = ({ name, tag, id, done, onDoneTask, onDeleteTask }) => {
       >
         Delete
       </Button>
-    </StylesWrap>
+    </StyledTaskItem>
   );
-};
-
-TaskItem.propTypes = {
-  name: PropTypes.string,
-  tag: PropTypes.string,
-  id: PropTypes.string,
-  done: PropTypes.bool,
-  onDoneTask: PropTypes.func,
-  onDeleteTask: PropTypes.func
 };

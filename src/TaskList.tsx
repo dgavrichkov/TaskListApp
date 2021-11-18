@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import { TaskItem } from "./TaskItem";
 import styled from "styled-components";
+import { ITask } from "./types/types";
 
 const StyledList = styled.ul`
   display: grid;
@@ -12,7 +12,19 @@ const StyledList = styled.ul`
   margin: 0;
 `;
 
-export const TaskList = ({ pageClass, tasks, onDoneTask, onDeleteTask }) => {
+interface ListProps {
+  pageClass: string;
+  tasks: ITask[];
+  onDoneTask: (id: string) => void;
+  onDeleteTask: (id: string) => void;
+}
+
+export const TaskList: FC<ListProps> = ({
+  pageClass,
+  tasks,
+  onDoneTask,
+  onDeleteTask
+}) => {
   let listItems = null;
   if (tasks.length > 0) {
     listItems = tasks.map((task) => (
@@ -32,12 +44,4 @@ export const TaskList = ({ pageClass, tasks, onDoneTask, onDeleteTask }) => {
   }
 
   return <StyledList className={pageClass}>{listItems}</StyledList>;
-};
-
-TaskList.propTypes = {
-  tasks: PropTypes.array
-};
-
-TaskList.defaultProps = {
-  tasks: []
 };

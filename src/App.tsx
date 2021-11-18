@@ -1,30 +1,31 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import nextId from "react-id-generator";
 import { TaskList } from "./TaskList";
 import { CreateForm } from "./CreateForm";
 import { TagFilter } from "./TagFilter";
 import { TaskStat } from "./TaskStat";
-import { nanoid } from "nanoid";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { Button } from "./components/Button";
+import { ITask, IThemes } from "./types/types";
 
 const LOADED_TASKS = [
   {
+    id: nextId(),
     name: "1",
     tag: "regular",
-    done: false,
-    id: nanoid()
+    done: false
   },
   {
+    id: nextId(),
     name: "2",
     tag: "daily",
-    done: true,
-    id: nanoid()
+    done: true
   },
   {
+    id: nextId(),
     name: "3",
     tag: "daily",
-    done: true,
-    id: nanoid()
+    done: true
   }
 ];
 
@@ -36,7 +37,7 @@ const GlobalStyles = createGlobalStyle`
   }
   body {
     font-family: "Rubik", sans-serif;
-    background: ${(props) => props.theme.colors.primary};
+    background: ${(props: any) => props.theme.colors.primary};
   }
   a, button, input, textarea {
     &:focus:not(:focus-visible) {
@@ -44,13 +45,13 @@ const GlobalStyles = createGlobalStyle`
     }
     &:focus-visible,
     &:-moz-focusring {
-      outline: 1px solid ${(props) => props.theme.colors.accent}
+      outline: 1px solid ${(props: any) => props.theme.colors.accent}
     }
   }
 `;
 
-const themes = {
-  default: {
+const THEMES: IThemes = {
+  light: {
     colors: {
       primary: "#EEEEEE",
       accent: "#25CEDE",
@@ -82,24 +83,12 @@ const themes = {
   }
 };
 
-const ThemeSwitcher = (props) => {
-  return (
-    <Button
-      onClick={() => {
-        props.onThemeClick();
-      }}
-    >
-      Switch Theme
-    </Button>
-  );
-};
-
 const StyledPageWrap = styled.div`
   padding: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
-  color: ${(props) => props.theme.colors.text || `#000`};
+  color: ${(props: any) => props.theme.colors.text || `#000`};
   .header {
     grid-column: 1 / -1;
     display: flex;
@@ -121,23 +110,23 @@ const StyledPageWrap = styled.div`
 `;
 
 export const App = function () {
-  const [tasks, setTasks] = useState(LOADED_TASKS);
-  const [filter, setFilter] = useState("all");
-  const [theme, setTheme] = useState("default");
+  const [tasks, setTasks] = useState<ITask[]>(LOADED_TASKS);
+  const [filter, setFilter] = useState<string>("all");
+  const [theme, setTheme] = useState<string>("dark");
 
-  const tasksRef = useRef();
+  const tasksRef = useRef<ITask[]>([]);
 
   useEffect(() => {
     tasksRef.current = tasks;
   }, [tasks]);
 
   const addTask = useCallback((task) => {
-    const newTask = Object.assign({}, task, { done: false, id: nanoid() });
+    const newTask = { ...task, done: false, id: nextId() };
     setTasks([...tasksRef.current, newTask]);
   }, []);
 
   const doneTask = useCallback(
-    (id) => {
+    (id: string) => {
       setTasks(
         tasks.map((task) => {
           if (task.id === id) {
@@ -151,21 +140,21 @@ export const App = function () {
   );
 
   const deleteTask = useCallback(
-    (id) => {
+    (id: string) => {
       setTasks(tasks.filter((task) => task.id !== id));
     },
     [tasks]
   );
 
-  const filterTasklist = (tag) => {
+  const filterTasklist = (tag: string) => {
     setFilter(tag);
   };
 
-  const filteredTasks = (tag) => {
+  const filteredTasks = (tag: string) => {
     if (tag !== "all") {
       return [...tasks].filter((task) => task.tag === tag);
     } else {
-      return [...tasks];
+      return tasks;
     }
   };
 
@@ -174,19 +163,19 @@ export const App = function () {
   };
 
   const countDoneTasks = () => {
-    return tasks.filter((task) => task.done === true).length;
+    return tasks.filter((task) => task.done).length;
   };
 
   const handleSwitchTheme = () => {
-    if (theme === "default") {
+    if (theme === "light") {
       setTheme("dark");
     } else {
-      setTheme("default");
+      setTheme("light");
     }
   };
 
   return (
-    <ThemeProvider theme={themes[theme]}>
+    <ThemeProvider theme={THEMES[theme]}>
       <GlobalStyles />
       <StyledPageWrap className="page">
         <header className="header">

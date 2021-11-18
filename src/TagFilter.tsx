@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { Fragment, FC } from "react";
 import { Button } from "./components/Button";
-import { nanoid } from "nanoid";
+import nextId from "react-id-generator";
 import styled from "styled-components";
+import { ITask } from "./types/types";
 
 const StyledWrap = styled.div`
   align-self: start;
@@ -24,11 +24,18 @@ const StyledWrap = styled.div`
   }
 `;
 
-export const TagFilter = React.memo(
+interface FilterProps {
+  tasks: ITask[];
+  pageClass: string;
+  currentFilter: string;
+  onPickTag: (tag: string) => void;
+}
+
+export const TagFilter: FC<FilterProps> = React.memo(
   ({ tasks, onPickTag, pageClass, currentFilter }) => {
-    const uniqtags = new Set(tasks.map((task) => task.tag));
+    const uniqtags = new Set(tasks.map((task: { tag: string }) => task.tag));
     const tags = Array.from(uniqtags).map((uniqtag) => {
-      return { id: nanoid(), tagname: uniqtag };
+      return { id: nextId(), tagname: uniqtag };
     });
 
     const tagElems = tags.map((tag) => {
@@ -69,10 +76,3 @@ export const TagFilter = React.memo(
     );
   }
 );
-
-TagFilter.propTypes = {
-  tasks: PropTypes.array,
-  pageClass: PropTypes.string,
-  currentFilter: PropTypes.string,
-  onPickTag: PropTypes.func
-};
