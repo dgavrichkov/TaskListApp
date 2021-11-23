@@ -23,15 +23,15 @@ const StyledForm = styled.form`
   }
 `;
 
-interface Task {
+type Task = {
   name: string;
   tag: string;
-}
+};
 
-interface FormProps {
+type FormProps = {
   pageClass: string;
   onAddTask: (task: Task) => void;
-}
+};
 
 export const CreateForm: FC<FormProps> = React.memo(
   ({ pageClass, onAddTask }) => {

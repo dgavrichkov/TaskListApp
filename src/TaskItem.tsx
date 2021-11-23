@@ -2,19 +2,19 @@ import React, { FC } from "react";
 import { Button } from "./components/Button";
 import styled from "styled-components";
 
-interface TaskProps {
+type TaskProps = {
   name: string;
   tag: string;
   id: string;
   done: boolean;
   onDoneTask: (id: string) => void;
   onDeleteTask: (id: string) => void;
-}
+};
 
-interface StyledWrapProps {
+type StyledWrapProps = {
   className: string;
   done: boolean;
-}
+};
 
 const StyledTaskItem = styled.div<StyledWrapProps>`
   border-radius: 4px;

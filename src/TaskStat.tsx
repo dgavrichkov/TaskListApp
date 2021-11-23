@@ -15,11 +15,11 @@ const StyledWrap = styled.div`
   }
 `;
 
-interface StatProps {
+type StatProps = {
   pageClass: string;
   countAllTasks: number;
   countDoneTasks: number;
-}
+};
 
 export const TaskStat: FC<StatProps> = ({
   pageClass,

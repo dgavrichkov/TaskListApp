@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { TaskItem } from "./TaskItem";
 import styled from "styled-components";
 import { ITask } from "./types/types";
-
 const StyledList = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
@@ -12,12 +11,14 @@ const StyledList = styled.ul`
   margin: 0;
 `;
 
-interface ListProps {
+type ListProps = {
   pageClass: string;
   tasks: ITask[];
   onDoneTask: (id: string) => void;
   onDeleteTask: (id: string) => void;
-}
+};
+
+type ItemsList = React.ReactNode;
 
 export const TaskList: FC<ListProps> = ({
   pageClass,
@@ -25,7 +26,7 @@ export const TaskList: FC<ListProps> = ({
   onDoneTask,
   onDeleteTask
 }) => {
-  let listItems = null;
+  let listItems: ItemsList = null;
   if (tasks.length > 0) {
     listItems = tasks.map((task) => (
       <li className="tasks-list__item" key={task.id}>

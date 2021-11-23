@@ -24,12 +24,12 @@ const StyledWrap = styled.div`
   }
 `;
 
-interface FilterProps {
+type FilterProps = {
   tasks: ITask[];
   pageClass: string;
   currentFilter: string;
   onPickTag: (tag: string) => void;
-}
+};
 
 export const TagFilter: FC<FilterProps> = React.memo(
   ({ tasks, onPickTag, pageClass, currentFilter }) => {

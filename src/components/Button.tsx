@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
@@ -14,10 +14,29 @@ const StyledButton = styled.button`
   }
 `;
 
-export const Button = (props: any) => {
-  return <StyledButton {...props} />;
+interface ButtonProps {
+  className?: string;
+  buttonType?: "button" | "submit" | "reset" | undefined;
+  onClick: () => void;
+}
+
+export const Button: FC<ButtonProps> = ({
+  children,
+  className,
+  buttonType = "button",
+  onClick
+}) => {
+  return (
+    <StyledButton
+      className={className}
+      type={buttonType}
+      onClick={() => onClick()}
+    >
+      {children}
+    </StyledButton>
+  );
 };
 
-export const BoldButton = styled(StyledButton)`
+export const BoldButton = styled(Button)`
   font-weight: 700;
 `;

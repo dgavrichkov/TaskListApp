@@ -6,7 +6,7 @@ import { TagFilter } from "./TagFilter";
 import { TaskStat } from "./TaskStat";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { ITask, IThemes } from "./types/types";
+import { ITask, IThemes, TNewTask } from "./types/types";
 
 const LOADED_TASKS = [
   {
@@ -120,7 +120,7 @@ export const App = function () {
     tasksRef.current = tasks;
   }, [tasks]);
 
-  const addTask = useCallback((task) => {
+  const addTask = useCallback((task: TNewTask) => {
     const newTask = { ...task, done: false, id: nextId() };
     setTasks([...tasksRef.current, newTask]);
   }, []);
