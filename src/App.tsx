@@ -1,33 +1,13 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import nextId from "react-id-generator";
+import React, { useState } from "react";
 import { TaskList } from "./TaskList";
 import { CreateForm } from "./CreateForm";
 import { TagFilter } from "./TagFilter";
 import { TaskStat } from "./TaskStat";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import { ITask, IThemes, TNewTask } from "./types/types";
-
-const LOADED_TASKS = [
-  {
-    id: nextId(),
-    name: "1",
-    tag: "regular",
-    done: false
-  },
-  {
-    id: nextId(),
-    name: "2",
-    tag: "daily",
-    done: true
-  },
-  {
-    id: nextId(),
-    name: "3",
-    tag: "daily",
-    done: true
-  }
-];
+import { IThemes } from "./types/types";
+import { useTypedSelector } from "./hooks/useTypedSelector";
+import { useActions } from "./hooks/useActions";
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -97,54 +77,28 @@ const StyledPageWrap = styled.div`
   }
   .form {
     grid-column: 1 / -1;
+    grid-row: 2;
   }
   .list {
     grid-column: 1;
+    grid-row: 3 / 6;
+    align-content: start;
   }
   .filter {
     grid-column: 2;
+    grid-row: 4;
   }
   .stat {
-    grid-column: 1 / -1;
+    grid-column: 2 / -1;
+    grid-row: 3;
   }
 `;
 
 export const App = function () {
-  const [tasks, setTasks] = useState<ITask[]>(LOADED_TASKS);
+  const { tasks } = useTypedSelector((state) => state.tasks);
+  const { toggleTaskAction, delTaskAction, addTaskAction } = useActions();
   const [filter, setFilter] = useState<string>("all");
   const [theme, setTheme] = useState<string>("dark");
-
-  const tasksRef = useRef<ITask[]>([]);
-
-  useEffect(() => {
-    tasksRef.current = tasks;
-  }, [tasks]);
-
-  const addTask = useCallback((task: TNewTask) => {
-    const newTask = { ...task, done: false, id: nextId() };
-    setTasks([...tasksRef.current, newTask]);
-  }, []);
-
-  const doneTask = useCallback(
-    (id: string) => {
-      setTasks(
-        tasks.map((task) => {
-          if (task.id === id) {
-            task.done = !task.done;
-          }
-          return task;
-        })
-      );
-    },
-    [tasks]
-  );
-
-  const deleteTask = useCallback(
-    (id: string) => {
-      setTasks(tasks.filter((task) => task.id !== id));
-    },
-    [tasks]
-  );
 
   const filterTasklist = (tag: string) => {
     setFilter(tag);
@@ -182,7 +136,7 @@ export const App = function () {
           <h1>ToDo</h1>
           <ThemeSwitcher onThemeClick={handleSwitchTheme} />
         </header>
-        <CreateForm onAddTask={addTask} pageClass="form" />
+        <CreateForm onAddTask={addTaskAction} pageClass="form" />
         <TaskStat
           pageClass="stat"
           countAllTasks={countAllTasks()}
@@ -191,8 +145,8 @@ export const App = function () {
         <TaskList
           pageClass="list"
           tasks={filteredTasks(filter)}
-          onDoneTask={doneTask}
-          onDeleteTask={deleteTask}
+          onDoneTask={toggleTaskAction}
+          onDeleteTask={delTaskAction}
         />
         <TagFilter
           pageClass="filter"

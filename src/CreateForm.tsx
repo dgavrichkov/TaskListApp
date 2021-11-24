@@ -1,6 +1,7 @@
 import React, { useState, FC } from "react";
 import { Button, BoldButton } from "./components/Button";
 import styled from "styled-components";
+import { TasksAction, TNewTask } from "./types/types";
 
 const StyledForm = styled.form`
   display: grid;
@@ -23,14 +24,9 @@ const StyledForm = styled.form`
   }
 `;
 
-type Task = {
-  name: string;
-  tag: string;
-};
-
 type FormProps = {
   pageClass: string;
-  onAddTask: (task: Task) => void;
+  onAddTask: (task: TNewTask) => TasksAction;
 };
 
 export const CreateForm: FC<FormProps> = React.memo(
