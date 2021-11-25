@@ -1,7 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { TaskItem } from "./TaskItem";
 import styled from "styled-components";
 import { ITask } from "./types/types";
+import { useTypedSelector } from "./hooks/useTypedSelector";
+import { useActions } from "./hooks/useActions";
+
 const StyledList = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
@@ -14,18 +17,18 @@ const StyledList = styled.ul`
 type ListProps = {
   pageClass: string;
   tasks: ITask[];
-  onDoneTask: (id: string) => void;
-  onDeleteTask: (id: string) => void;
 };
 
 type ItemsList = React.ReactNode;
 
-export const TaskList: FC<ListProps> = ({
-  pageClass,
-  tasks,
-  onDoneTask,
-  onDeleteTask
-}) => {
+export const TaskList: FC<ListProps> = ({ pageClass }) => {
+  const { tasks, isLoading } = useTypedSelector((state) => state.tasks);
+  const { fetchTasks, toggleTaskAction, delTaskAction } = useActions();
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
   let listItems: ItemsList = null;
   if (tasks.length > 0) {
     listItems = tasks.map((task) => (
@@ -35,11 +38,13 @@ export const TaskList: FC<ListProps> = ({
           tag={task.tag}
           done={task.done}
           id={task.id}
-          onDoneTask={onDoneTask}
-          onDeleteTask={onDeleteTask}
+          onDoneTask={toggleTaskAction}
+          onDeleteTask={delTaskAction}
         />
       </li>
     ));
+  } else if (isLoading) {
+    listItems = "Подождите, идет запрос";
   } else {
     listItems = "Задач нет";
   }

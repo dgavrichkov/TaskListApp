@@ -1,7 +1,8 @@
 import React, { useState, FC } from "react";
 import { Button, BoldButton } from "./components/Button";
 import styled from "styled-components";
-import { TasksAction, TNewTask } from "./types/types";
+// import { TasksAction, TNewTask } from "./types/types";
+import { useActions } from "./hooks/useActions";
 
 const StyledForm = styled.form`
   display: grid;
@@ -26,59 +27,58 @@ const StyledForm = styled.form`
 
 type FormProps = {
   pageClass: string;
-  onAddTask: (task: TNewTask) => TasksAction;
 };
 
-export const CreateForm: FC<FormProps> = React.memo(
-  ({ pageClass, onAddTask }) => {
-    const [name, setName] = useState("");
-    const [tag, setTag] = useState("");
+export const CreateForm: FC<FormProps> = React.memo(({ pageClass }) => {
+  const [name, setName] = useState("");
+  const [tag, setTag] = useState("");
 
-    const handleClear = () => {
-      setName("");
-      setTag("");
-    };
+  const { addTaskAction } = useActions();
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setName(e.target.value);
-    };
+  const handleClear = () => {
+    setName("");
+    setTag("");
+  };
 
-    const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTag(e.target.value);
-    };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
 
-    const handleAdd = () => {
-      if (!name || !tag) {
-        return;
-      }
-      onAddTask({
-        name: name,
-        tag: tag
-      });
-      handleClear();
-    };
+  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTag(e.target.value);
+  };
 
-    return (
-      <StyledForm className={`todo-create ${pageClass}`}>
-        <input
-          type="text"
-          placeholder="add task"
-          value={name}
-          onChange={handleNameChange}
-        />
-        <input
-          type="text"
-          placeholder="tag"
-          value={tag}
-          onChange={handleTagChange}
-        />
-        <BoldButton type="button" onClick={handleAdd}>
-          Add
-        </BoldButton>
-        <Button type="button" onClick={handleClear}>
-          Clear
-        </Button>
-      </StyledForm>
-    );
-  }
-);
+  const handleAdd = () => {
+    if (!name || !tag) {
+      return;
+    }
+    addTaskAction({
+      name: name,
+      tag: tag
+    });
+    handleClear();
+  };
+
+  return (
+    <StyledForm className={`todo-create ${pageClass}`}>
+      <input
+        type="text"
+        placeholder="add task"
+        value={name}
+        onChange={handleNameChange}
+      />
+      <input
+        type="text"
+        placeholder="tag"
+        value={tag}
+        onChange={handleTagChange}
+      />
+      <BoldButton buttonType="button" onClick={handleAdd}>
+        Add
+      </BoldButton>
+      <Button buttonType="button" onClick={handleClear}>
+        Clear
+      </Button>
+    </StyledForm>
+  );
+});

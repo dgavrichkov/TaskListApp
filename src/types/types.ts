@@ -48,7 +48,7 @@ interface FetchTasksAction {
 }
 interface FetchTasksSuccessAction {
   type: TasksActionTypes.FETCH_TASKS_SUCCESS;
-  payload: any;
+  payload: ITask[];
 }
 interface FetchTasksErrorAction {
   type: TasksActionTypes.FETCH_TASKS_ERROR;

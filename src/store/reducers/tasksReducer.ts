@@ -2,26 +2,7 @@ import nextId from "react-id-generator";
 import { TasksState, TasksAction, TasksActionTypes } from "../../types/types";
 
 const initialTasksState: TasksState = {
-  tasks: [
-    {
-      id: nextId(),
-      name: "1",
-      tag: "regular",
-      done: false
-    },
-    {
-      id: nextId(),
-      name: "2",
-      tag: "daily",
-      done: true
-    },
-    {
-      id: nextId(),
-      name: "3",
-      tag: "daily",
-      done: true
-    }
-  ],
+  tasks: [],
   isLoading: false,
   error: null
 };
@@ -34,9 +15,9 @@ export const tasksReducer = (
     case TasksActionTypes.FETCH_TASKS:
       return { ...state, isLoading: true };
     case TasksActionTypes.FETCH_TASKS_SUCCESS:
-      return state;
+      return { ...state, isLoading: false, tasks: action.payload };
     case TasksActionTypes.FETCH_TASKS_ERROR:
-      return state;
+      return { ...state, isLoading: false, tasks: action.payload };
     case TasksActionTypes.ADD_TASK:
       const newTask = { ...action.payload, done: false, id: nextId() };
       return { ...state, tasks: [newTask, ...state.tasks] };

@@ -7,7 +7,6 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { IThemes } from "./types/types";
 import { useTypedSelector } from "./hooks/useTypedSelector";
-import { useActions } from "./hooks/useActions";
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -96,7 +95,7 @@ const StyledPageWrap = styled.div`
 
 export const App = function () {
   const { tasks } = useTypedSelector((state) => state.tasks);
-  const { toggleTaskAction, delTaskAction, addTaskAction } = useActions();
+
   const [filter, setFilter] = useState<string>("all");
   const [theme, setTheme] = useState<string>("dark");
 
@@ -136,18 +135,13 @@ export const App = function () {
           <h1>ToDo</h1>
           <ThemeSwitcher onThemeClick={handleSwitchTheme} />
         </header>
-        <CreateForm onAddTask={addTaskAction} pageClass="form" />
+        <CreateForm pageClass="form" />
         <TaskStat
           pageClass="stat"
           countAllTasks={countAllTasks()}
           countDoneTasks={countDoneTasks()}
         />
-        <TaskList
-          pageClass="list"
-          tasks={filteredTasks(filter)}
-          onDoneTask={toggleTaskAction}
-          onDeleteTask={delTaskAction}
-        />
+        <TaskList pageClass="list" tasks={filteredTasks(filter)} />
         <TagFilter
           pageClass="filter"
           tasks={tasks}

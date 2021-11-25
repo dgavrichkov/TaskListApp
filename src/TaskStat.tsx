@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 const StyledWrap = styled.div`
-  border-radius: 14px;
+  border-radius: 4px;
   box-shadow: ${(props) => props.theme.shadows.button};
   padding: 14px;
   p {
